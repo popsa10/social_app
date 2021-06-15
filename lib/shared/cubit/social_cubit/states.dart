@@ -15,9 +15,19 @@ class SocialGetUserDataSuccessState extends SocialAppStates {
 
 class SocialGetUserDataErrorState extends SocialAppStates {}
 
+class SocialGetAllUsersLoadingState extends SocialAppStates {}
+
+class SocialGetAllUsersSuccessState extends SocialAppStates {}
+
+class SocialGetAllUsersErrorState extends SocialAppStates {}
+
 class SocialGetPostsLoadingState extends SocialAppStates {}
 
 class SocialGetPostsSuccessState extends SocialAppStates {}
+
+class SocialLikePostSuccessState extends SocialAppStates {}
+
+class SocialLikePostErrorState extends SocialAppStates {}
 
 class SocialGetPostsErrorState extends SocialAppStates {}
 
@@ -58,3 +68,12 @@ class SocialPostImagePickedSuccessState extends SocialAppStates {}
 class SocialPostImagePickedErrorState extends SocialAppStates {}
 
 class SocialRemovePostImageState extends SocialAppStates {}
+
+//chat
+class SocialSendMessageSuccessState extends SocialAppStates {}
+
+class SocialSendMessageErrorState extends SocialAppStates {}
+
+class SocialGetMessageSuccessState extends SocialAppStates {}
+
+class SocialGetMessageErrorState extends SocialAppStates {}

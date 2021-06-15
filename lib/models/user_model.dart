@@ -23,7 +23,7 @@ class SocialUserModel {
     name = json['name'];
     phone = json['phone'];
     bio = json['bio'];
-    uId = json['uId'];
+    uId = json['uid'];
     isEmailVerified = json['isEmailVerified'];
     image = json["image"];
     cover = json["cover"];
