@@ -1,17 +1,37 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social_app/modules/login_screen.dart';
 import 'package:social_app/networks/local/cache_helper.dart';
+import 'package:social_app/networks/remote/dio_helper.dart';
+import 'package:social_app/shared/components/defaults.dart';
 import 'package:social_app/shared/cubit/social_cubit/cubit.dart';
 import 'package:social_app/shared/styles/bloc_observer.dart';
 import 'package:social_app/shared/styles/constants.dart';
 
 import 'layout/social_layout.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print(message.data.toString());
+  showToast(text: "background notification", color: Colors.green);
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  DioHelper.init();
+  var token = await FirebaseMessaging.instance.getToken();
+  print(token);
+  FirebaseMessaging.onMessage.listen((event) {
+    print(event.data.toString());
+    showToast(text: "onMessage notification", color: Colors.green);
+  });
+  FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    print(event.data.toString());
+    showToast(text: "onMessageOpenedApp notification", color: Colors.green);
+  });
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await CacheHelper.init();
   userId = CacheHelper.getData("token");
   Bloc.observer = MyBlocObserver();

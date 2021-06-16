@@ -7,6 +7,7 @@ class SocialUserModel {
   bool isEmailVerified;
   String image;
   String cover;
+  String token;
 
   SocialUserModel(
       {this.email,
@@ -14,6 +15,7 @@ class SocialUserModel {
       this.phone,
       this.bio,
       this.uId,
+      this.token,
       this.isEmailVerified,
       this.image,
       this.cover});
@@ -27,6 +29,7 @@ class SocialUserModel {
     isEmailVerified = json['isEmailVerified'];
     image = json["image"];
     cover = json["cover"];
+    token = json["token"];
   }
 
   Map<String, dynamic> toMap() {
@@ -39,6 +42,7 @@ class SocialUserModel {
       'isEmailVerified': isEmailVerified,
       "image": image,
       "cover": cover,
+      "token": token,
     };
   }
 }

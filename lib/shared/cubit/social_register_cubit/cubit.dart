@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,12 +14,16 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
   static SocialRegisterCubit get(context) => BlocProvider.of(context);
 
   void userRegister(
-      {@required email, @required password, @required name, @required phone}) {
+      {@required email,
+      @required password,
+      @required name,
+      @required phone}) async {
     emit(SocialRegisterLoadingState());
+    var token = await FirebaseMessaging.instance.getToken();
     FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password)
         .then((value) {
-      userData(value.user.uid, name, email, phone);
+      userData(value.user.uid, name, email, phone, token);
       emit(SocialRegisterSuccessState(value.user.uid));
     }).catchError((error) {
       print(error.toString());
@@ -26,7 +31,7 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
     });
   }
 
-  void userData(String id, String name, String email, String phone) {
+  void userData(String id, String name, String email, String phone, token) {
     SocialUserModel model = SocialUserModel(
         email: email,
         phone: phone,
@@ -36,7 +41,9 @@ class SocialRegisterCubit extends Cubit<SocialRegisterStates> {
         isEmailVerified: false,
         image:
             "https://img.freepik.com/free-photo/serious-man-thinking_1149-1328.jpg?size=338&ext=jpg",
-        uId: id);
+        uId: id,
+        token: token);
+
     FirebaseFirestore.instance
         .collection("users")
         .doc(id)

@@ -36,7 +36,7 @@ class ChatDetailsScreen extends StatelessWidget {
               listener: (context, state) {},
               builder: (context, state) {
                 return ConditionalBuilder(
-                  condition: SocialAppCubit.get(context).messages.length > 0,
+                  condition: true,
                   builder: (context) => Padding(
                     padding: const EdgeInsets.all(20),
                     child: Column(
@@ -96,6 +96,12 @@ class ChatDetailsScreen extends StatelessWidget {
                                         receiverId: userModel.uId,
                                         dateTime: DateTime.now().toString(),
                                         text: textController.text);
+                                    SocialAppCubit.get(context).messageNotify(
+                                        text: textController.text,
+                                        senderName: SocialAppCubit.get(context)
+                                            .userModel
+                                            .name,
+                                        receiverToken: userModel.token);
                                   },
                                   minWidth: 1.0,
                                   child: Icon(

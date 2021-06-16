@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +17,7 @@ import 'package:social_app/modules/new_post_screen.dart';
 import 'package:social_app/modules/settings_screen.dart';
 import 'package:social_app/modules/users_screen.dart';
 import 'package:social_app/networks/local/cache_helper.dart';
+import 'package:social_app/networks/remote/dio_helper.dart';
 import 'package:social_app/shared/components/defaults.dart';
 import 'package:social_app/shared/styles/constants.dart';
 import 'package:social_app/shared/cubit/social_cubit/states.dart';
@@ -62,8 +64,12 @@ class SocialAppCubit extends Cubit<SocialAppStates> {
   ];
   int currentIndex = 0;
   void changeBottomNav(int value) {
-    if (value == 1) getUsers();
-    if (value == 0) getPosts();
+    if (value == 1) {
+      getUsers();
+    }
+    if (value == 0) {
+      getPosts();
+    }
     if (value == 2) {
       emit(SocialNewPostState());
     } else
@@ -375,12 +381,34 @@ class SocialAppCubit extends Cubit<SocialAppStates> {
         .snapshots()
         .listen((event) {
       messages = [];
-
       event.docs.forEach((element) {
         messages.add(MessageModel.fromJson(element.data()));
       });
 
       emit(SocialGetMessageSuccessState());
+    });
+  }
+
+  void messageNotify({String receiverToken, String text, String senderName}) {
+    DioHelper.postData(url: "fcm/send", data: {
+      "to": "$receiverToken",
+      "notification": {
+        "body": "$text",
+        "OrganizationId": "2",
+        "content_available": true,
+        "priority": "high",
+        "subtitle": "Elementary School",
+        "title": "$senderName"
+      },
+      "data": {
+        "priority": "high",
+        "sound": "app_sound.wav",
+        "content_available": true,
+        "bodyText": "$text",
+        "organization": "Elementary school"
+      }
+    }).then((value) {}).catchError((error) {
+      print(error.toString());
     });
   }
 }
