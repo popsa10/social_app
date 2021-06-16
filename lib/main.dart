@@ -21,8 +21,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   DioHelper.init();
-  var token = await FirebaseMessaging.instance.getToken();
-  print(token);
   FirebaseMessaging.onMessage.listen((event) {
     print(event.data.toString());
     showToast(text: "onMessage notification", color: Colors.green);
@@ -52,8 +50,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => SocialAppCubit()
-        ..getUserData()
-        ..getPosts(),
+        ..getPosts()
+        ..getUserData(),
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Social App',

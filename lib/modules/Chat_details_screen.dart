@@ -102,6 +102,7 @@ class ChatDetailsScreen extends StatelessWidget {
                                             .userModel
                                             .name,
                                         receiverToken: userModel.token);
+                                    textController.text = "";
                                   },
                                   minWidth: 1.0,
                                   child: Icon(
